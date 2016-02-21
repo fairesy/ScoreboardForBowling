@@ -5,7 +5,7 @@ public class ScoreboardPrinter {
 	int theNumberOfPlayers;
 	ArrayList<Scoreboard> scoreboardList;
 	
-	String indexString = "| player|  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |   10   | total |";
+	String indexString = "| player|   1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10   | total |";
 	String line = "＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿";
 	
 	public ScoreboardPrinter(ArrayList<Scoreboard> _scoreboardList) {
@@ -27,28 +27,42 @@ public class ScoreboardPrinter {
 		//각 프레임마다 firstRoll, secondRoll score get & print
 		System.out.println(this.indexString);
 		for(int i=0 ; i<this.scoreboardList.size() ; i++){
-			
-			//TODO theNumberOfPlayers는 scoreboardList의 size로 대체.
-			
-			//TODO get current frame score;
+						
+			//get current frame score;
 			System.out.println(this.line);
 			System.out.print("|   "+ (i+1) +"   ");
 			for(int frameId=0; frameId<10; frameId++){
-				int fr = this.scoreboardList.get(i).frameList.get(frameId).firstRoll;
-				int sr = this.scoreboardList.get(i).frameList.get(frameId).secondRoll;
+				Frame currentFrame = this.scoreboardList.get(i).frameList.get(frameId);
+				int fr = currentFrame.firstRoll;
 				
-				System.out.print("|" + fr + " |" + sr + " ");
-				
+				if(fr == 10){ System.out.print("|   X  "); }
+				else{
+					int sr = currentFrame.secondRoll;
+					if(currentFrame.leftPins == 0){ //스페어
+						if(fr == 0){ System.out.print("|-"); }
+						else{ System.out.print("|" + fr); }
+						System.out.print(" | / ");
+						
+					}else{ //노멀 
+						if(fr == 0){ System.out.print("|-"); }
+						else{ System.out.print("|" + fr); }
+						
+						if(sr == 0){ System.out.print(" |- "); }
+						else{ System.out.print(" |" + sr + " "); }
+					}
+				}
 			}
 			System.out.println("       |");
 
 			//각 프레임 합산 점수 프린트 
 			System.out.print("|       ");
+			int playerTotal = 0;
 			for(int j=0; j<10; j++){
 				int frameTotal = this.scoreboardList.get(i).frameList.get(j).getTotal();
+				playerTotal += frameTotal;
 				System.out.print("|  "+frameTotal+"  ");
 			}
-			System.out.println("|       |");
+			System.out.println("| "+ playerTotal +" |");
 		}
 	}
 
