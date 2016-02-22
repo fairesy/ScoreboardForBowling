@@ -5,22 +5,11 @@ public class ScoreboardPrinter {
 	int theNumberOfPlayers;
 	ArrayList<Scoreboard> scoreboardList;
 	
-	String indexString = "| player|  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10   | total |";
+	String indexString = "| player|  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  | 10  |  | total |";
 	String line = "＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿";
 	
 	public ScoreboardPrinter(ArrayList<Scoreboard> _scoreboardList) {
 		this.scoreboardList = _scoreboardList;
-	}
-
-	public void init(int _theNumberOfPlayers) {
-		System.out.println(this.indexString);
-		this.theNumberOfPlayers = _theNumberOfPlayers;
-		
-		for(int i=0 ; i<this.theNumberOfPlayers ; i++){
-			System.out.println(this.line);
-			System.out.println("|   "+ (i+1) +"   |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |       |");
-			System.out.println("|       |     |     |     |     |     |     |     |     |     |        |       |");
-		}
 	}
 
 	public void printCurrentScore() {
@@ -53,18 +42,23 @@ public class ScoreboardPrinter {
 					}
 				}
 			}
-			System.out.println("       |");
+			System.out.println("|  |       |");
 
 			//각 프레임 합산 점수 프린트 
 			System.out.print("|       ");
 			for(int j=0; j<10; j++){
 				Frame currentFrame = currentBoard.frameList.get(j);
 				int frameTotal = currentFrame.totalScore;
+				
+				if(currentFrame.additionalCalculationNeeded){
+					System.out.print("|  0  ");
+				}else{
+					if(frameTotal>9){ System.out.print("| "+frameTotal+"  "); }
+					else{ System.out.print("|  "+frameTotal+"  "); }										
+				}
 			
-				if(frameTotal>9){ System.out.print("| "+frameTotal+"  "); }
-				else{ System.out.print("|  "+frameTotal+"  "); }
 			}
-			System.out.println("| "+ currentBoard.playerTotal +" |");
+			System.out.println("|  |  "+ currentBoard.playerTotal +"  |");
 		}
 	}
 

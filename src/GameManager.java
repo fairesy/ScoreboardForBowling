@@ -87,6 +87,7 @@ public class GameManager {
 				
 				calculator.calculateEachFrameTotalUntil(frameId, currentScoreboard);
 				calculator.calculatePlayerTotal(currentScoreboard);
+				checker.checkPrintableFrameTotals(frameId, currentScoreboard);
 				this.scoreboardPrinter.printCurrentScore();
 				
 			}
