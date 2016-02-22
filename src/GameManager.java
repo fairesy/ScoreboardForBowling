@@ -5,6 +5,7 @@ public class GameManager {
 
 	ScoreboardPrinter scoreboardPrinter;
 	ArrayList<Scoreboard> scoreboardList;
+	private Scanner roll;
 	
 	public void createScoreboard(int _theNumberOfPlayers) {
 		this.scoreboardList = new ArrayList<Scoreboard>();
@@ -17,7 +18,7 @@ public class GameManager {
 	}
 
 	public void playGame() {		
-		Scanner roll = new Scanner(System.in);
+		roll = new Scanner(System.in);
 		
 		FrameStateChecker checker = new FrameStateChecker();
 		ScoreCalculator calculator = new ScoreCalculator();
@@ -41,11 +42,7 @@ public class GameManager {
 			
 			String currentFrameState = checker.checkStrike(currentFrame);
 			
-			if(currentFrameState == "strike"){
-				calculator.calculateEachFrameTotalUntil(frameId, currentScoreboard);
-				calculator.calculatePlayerTotal(currentScoreboard);
-				this.scoreboardPrinter.printCurrentScore();
-			}else{
+			if(currentFrameState != "strike"){
 				System.out.println("두 번째 넘어뜨린 핀 수는?");
 				int secondRoll = roll.nextInt();
 				
@@ -57,11 +54,41 @@ public class GameManager {
 				currentFrame.leftPins = currentFrame.leftPins - firstRoll;
 				
 				currentFrameState = checker.checkSpare(currentFrame);
-				calculator.calculateEachFrameTotalUntil(frameId, currentScoreboard);
-				calculator.calculatePlayerTotal(currentScoreboard);
-				this.scoreboardPrinter.printCurrentScore();
 			}
-			//TODO 왜 프레임토탈이 한프레임씩 뒤에 프린트되는거지......?
+			
+			//10번째 프레임이 스트라이크/스페어일 경우 보너스 프레임까지 플레이.
+			String tenthState = currentFrame.state;
+			if((frameId == 9) && (tenthState == "spare")){
+				System.out.println((frameId+1) + "보너스 프레임입니다.");
+				currentScoreboard = this.scoreboardList.get(0);
+				currentFrame = currentScoreboard.frameList.get(frameId+1);
+				
+				System.out.println("첫 번째 보너스 롤");
+				firstRoll = roll.nextInt();
+				currentFrame.firstRoll = firstRoll;
+				currentFrame.leftPins = currentFrame.leftPins - firstRoll;
+			}
+			
+			if((frameId == 9) && (tenthState == "strike")){
+				System.out.println((frameId+1) + "보너스 프레임입니다.");
+				currentScoreboard = this.scoreboardList.get(0);
+				currentFrame = currentScoreboard.frameList.get(frameId+1);
+				
+				System.out.println("첫 번째 보너스 롤");
+				firstRoll = roll.nextInt();
+				currentFrame.firstRoll = firstRoll;
+				currentFrame.leftPins = currentFrame.leftPins - firstRoll;
+				
+				System.out.println("두 번째 보너스 롤");
+				int secondRoll = roll.nextInt();
+				currentFrame.secondRoll = secondRoll;
+				currentFrame.leftPins = currentFrame.leftPins - secondRoll;
+			}
+			
+			calculator.calculateEachFrameTotalUntil(frameId, currentScoreboard);
+			calculator.calculatePlayerTotal(currentScoreboard);
+			this.scoreboardPrinter.printCurrentScore();
+			
 		}
 	}
 }
