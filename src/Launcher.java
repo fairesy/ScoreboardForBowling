@@ -2,11 +2,13 @@ import java.util.Scanner;
 
 public class Launcher {
 
+	private static Scanner in;
+
 	public static void main(String[] args) {
 		
 		//플레이 인원 수를 물어본다.
 		int theNumberOfPlayers;
-		Scanner in = new Scanner(System.in);
+		in = new Scanner(System.in);
 		
 		System.out.println("플레이어 수를 말해주세요!");
 		theNumberOfPlayers = in.nextInt();
