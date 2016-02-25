@@ -2,12 +2,11 @@ import java.util.ArrayList;
 
 public class ScoreCalculator {
 
-	//TODO 전체 프레임 다 스트라이크 쳤을 경우 게임이 끝나고 최종 계산할 때 1~9프레임 점수가 20점으로 프린트된다. 왜?
 	public void calculateEachFrameTotalUntil(int _frameId, Scoreboard _currentScoreboard) {
 		ArrayList<Frame> frameList= _currentScoreboard.frameList;
 		
 		//보너스프레임까지 플레이한 경우. 
-		if(_frameId > 9){
+		if(_frameId == 10){
 			for(int i=0; i<10; i++){
 				Frame currentFrame = frameList.get(i);
 				if(currentFrame.state == "strike"){
@@ -19,8 +18,9 @@ public class ScoreCalculator {
 							Frame afterNextFrame = frameList.get(i+2);
 							currentFrame.totalScore = currentFrame.firstRoll + nextFrame.firstRoll + afterNextFrame.firstRoll;
 						}
+					}else{
+						currentFrame.totalScore = currentFrame.firstRoll + nextFrame.firstRoll + nextFrame.secondRoll;
 					}
-					currentFrame.totalScore = currentFrame.firstRoll + nextFrame.firstRoll + nextFrame.secondRoll;
 				}else if(currentFrame.state == "spare"){
 					Frame nextFrame = frameList.get(i+1);
 					currentFrame.totalScore = currentFrame.firstRoll + currentFrame.secondRoll + nextFrame.firstRoll;
@@ -60,11 +60,11 @@ public class ScoreCalculator {
 		ArrayList<Frame> frameList= _currentScoreboard.frameList;
 		int total = 0;
 		for(int i=0; i<11; i++){
-			total += frameList.get(i).totalScore;
+//			total += frameList.get(i).totalScore;
 			//TODO 토탈 구하는 조건 수정 필요 : 마지막프레임이 노말이 아닐 경우 총합이 더해지지 않고 끝난다. 
-//			if(!frameList.get(i).additionalCalculationNeeded){
-//				total += frameList.get(i).totalScore;
-//			}
+			if(!frameList.get(i).additionalCalculationNeeded){
+				total += frameList.get(i).totalScore;
+			}
 		}
 		_currentScoreboard.playerTotal = total;
 	}

@@ -13,7 +13,6 @@ public class GameManager {
 			Scoreboard scoreboard = new Scoreboard();
 			this.scoreboardList.add(scoreboard);
 		}
-		
 		this.scoreboardPrinter = new ScoreboardPrinter(this.scoreboardList);
 	}
 
@@ -37,20 +36,18 @@ public class GameManager {
 					currentFrameState = checker.checkSpare(currentFrame);
 				}
 				
-				//10번째 프레임이 스트라이크/스페어일 경우 보너스 프레임까지 플레이.
 				if((frameId == 9) && (currentFrame.state != "normal")){
 					playBonusRolls(currentFrame.state, currentScoreboard);
 					frameId++;
 				}
 				
+				checker.checkIfAdditionalCalculationNeeded(frameId, currentScoreboard);
 				calculator.calculateEachFrameTotalUntil(frameId, currentScoreboard);
 				calculator.calculatePlayerTotal(currentScoreboard);
-				checker.checkPrintableFrameTotals(frameId, currentScoreboard);
 				this.scoreboardPrinter.printCurrentScore();
 			}
 		}
 	}
-
 
 	private void playFirstRoll(Frame currentFrame) {
 		try{

@@ -26,7 +26,7 @@ public class FrameStateChecker {
 		}
 	}
 
-	public void checkPrintableFrameTotals(int _frameId, Scoreboard _currentScoreboard) {
+	public void checkIfAdditionalCalculationNeeded(int _frameId, Scoreboard _currentScoreboard) {
 		ArrayList<Frame> frameList = _currentScoreboard.frameList;
 
 		//TODO 첫번째 프레임이 스페어인 경우 처리 안됨.
@@ -54,17 +54,21 @@ public class FrameStateChecker {
 							}
 						}
 						//현재 프레임이 어떻든 상관없이 지난 연속스트라이크는 계산이 끝난 상태가 되었다. 
-						if(beforePrevFrame.state == "strike"){
-							if(prevFrame.state == "strike"){
-								beforePrevFrame.additionalCalculationNeeded = false;
-							}
+						if(currentFrame.state == "strike"){
+							if(beforePrevFrame.state == "strike"){
+								if(prevFrame.state == "strike"){
+									beforePrevFrame.additionalCalculationNeeded = false;
+									prevFrame.additionalCalculationNeeded = true;
+								}
+							}							
 						}
 						if(prevFrame.state == "spare"){
 							prevFrame.additionalCalculationNeeded = false;
 						}					
-					}else{
-						currentFrame.additionalCalculationNeeded = false;
 					}
+//					else{
+//						currentFrame.additionalCalculationNeeded = false;
+//					}
 					
 				}
 			}
