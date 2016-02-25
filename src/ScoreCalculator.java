@@ -60,8 +60,6 @@ public class ScoreCalculator {
 		ArrayList<Frame> frameList= _currentScoreboard.frameList;
 		int total = 0;
 		for(int i=0; i<11; i++){
-//			total += frameList.get(i).totalScore;
-			//TODO 토탈 구하는 조건 수정 필요 : 마지막프레임이 노말이 아닐 경우 총합이 더해지지 않고 끝난다. 
 			if(!frameList.get(i).additionalCalculationNeeded){
 				total += frameList.get(i).totalScore;
 			}
